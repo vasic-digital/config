@@ -323,7 +323,20 @@ type GitConfig struct {
 	ConnectionTimeout    int    `json:"connectionTimeout"`
 }
 
-// NewGitConfig creates a GitConfig with defaults.
+// DefaultCommitAuthorName is the fallback commit author used by
+// NewGitConfig when callers supply no override. It is intentionally
+// generic so the library does not imply any particular host project.
+const DefaultCommitAuthorName = "vasic-config-bot"
+
+// DefaultCommitAuthorEmail is the fallback commit author email used
+// by NewGitConfig. Integrators should set their own identity via
+// GitConfig.CommitAuthorName / CommitAuthorEmail after construction.
+const DefaultCommitAuthorEmail = "noreply@vasic.digital"
+
+// NewGitConfig creates a GitConfig with defaults. The commit-author
+// fields default to the generic DefaultCommitAuthorName /
+// DefaultCommitAuthorEmail so this library remains project-agnostic;
+// callers override the identity to match their own release workflow.
 func NewGitConfig(name, repositoryURL, localCachePath string) *GitConfig {
 	return &GitConfig{
 		CommonConfig:      NewCommonConfig(name, StorageTypeGit),
@@ -331,8 +344,8 @@ func NewGitConfig(name, repositoryURL, localCachePath string) *GitConfig {
 		Branch:            "main",
 		LocalCachePath:    localCachePath,
 		AutoSync:          true,
-		CommitAuthorName:  "Catalogizer",
-		CommitAuthorEmail: "catalogizer@vasic.digital",
+		CommitAuthorName:  DefaultCommitAuthorName,
+		CommitAuthorEmail: DefaultCommitAuthorEmail,
 		ConnectionTimeout: 30000,
 	}
 }
