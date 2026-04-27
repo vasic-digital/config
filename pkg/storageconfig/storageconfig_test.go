@@ -140,8 +140,11 @@ func TestNewGitConfig(t *testing.T) {
 	assert.Equal(t, StorageTypeGit, cfg.Type)
 	assert.Equal(t, "main", cfg.Branch)
 	assert.True(t, cfg.AutoSync)
-	assert.Equal(t, "Catalogizer", cfg.CommitAuthorName)
-	assert.Equal(t, "catalogizer@vasic.digital", cfg.CommitAuthorEmail)
+	// The library ships generic defaults so it stays project-
+	// agnostic. Integrators override these after construction to
+	// match their own release workflow.
+	assert.Equal(t, DefaultCommitAuthorName, cfg.CommitAuthorName)
+	assert.Equal(t, DefaultCommitAuthorEmail, cfg.CommitAuthorEmail)
 	assert.Equal(t, 30000, cfg.ConnectionTimeout)
 }
 

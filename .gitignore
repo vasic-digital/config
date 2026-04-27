@@ -36,3 +36,5 @@ Thumbs.db
 # Build output
 /bin/
 /dist/
+
+reports/demos/
