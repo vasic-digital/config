@@ -1,0 +1,46 @@
+{
+  "_comment": "Round-253 bilingual fixtures for Config. Used by config_describe_challenge.sh + challenges/runner/main.go to verify UTF-8 / non-ASCII text round-trips losslessly through config.SaveFile -> LoadFile, env.Load, and storageconfig Marshal/Unmarshal paths. CONST-046 alignment (no hardcoded English-only assumption).",
+  "inputs": [
+    {
+      "locale": "en",
+      "name": "production",
+      "host": "Hello-Host",
+      "tags": ["alpha", "beta", "gamma"],
+      "expected_min_len": 4
+    },
+    {
+      "locale": "sr",
+      "name": "производња",
+      "host": "Здраво-Хост",
+      "tags": ["алфа", "бета", "гама"],
+      "expected_min_len": 4
+    },
+    {
+      "locale": "ja",
+      "name": "本番",
+      "host": "こんにちは-ホスト",
+      "tags": ["アルファ", "ベータ", "ガンマ"],
+      "expected_min_len": 2
+    },
+    {
+      "locale": "ar",
+      "name": "إنتاج",
+      "host": "مرحبا-المضيف",
+      "tags": ["ألفا", "بيتا", "غاما"],
+      "expected_min_len": 3
+    },
+    {
+      "locale": "zh-CN",
+      "name": "生产",
+      "host": "你好-主机",
+      "tags": ["阿尔法", "贝塔", "伽马"],
+      "expected_min_len": 2
+    }
+  ],
+  "expected_invariants": {
+    "json_round_trip": "config.SaveFile then LoadFile MUST preserve every byte of non-ASCII text without modification",
+    "env_binding": "env.Load MUST honour the default tag and override from process env without dropping non-ASCII bytes",
+    "storage_marshal": "storageconfig.MarshalConfig + Unmarshal* MUST round-trip non-ASCII names through every protocol struct",
+    "validator_runs": "validator.Validate MUST treat non-ASCII strings as legitimate values (Required + MinLength on rune-aware semantics)"
+  }
+}
